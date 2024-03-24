@@ -1,0 +1,231 @@
+
+/*const giphy = require('giphy-js-sdk-core');
+const giphyApiKey = 'GIPHY_API_KEY'
+const giphyClient = giphy(giphyApiKey);*/
+
+/*bot.start((ctx) => ctx.reply('Welcome to Quest Bot, your personal assistant for solving queries through images or text, tailored to your specific needs. '));*/
+
+ /*else if(userChoice === 'variation' && ctx.session.editingRequirement){
+                const fileId = ctx.session.editingRequirement.fileId;
+                const filePath = ctx.session.editingRequirement.filePath;
+    
+                const editImage = await createImageVariation(filePath);
+    
+                await ctx.replyWithPhoto({url: editImage});
+                ctx.session.editingRequirement = null;
+            }*/ 
+
+/* const gifResponse = await giphyClient.search('gifs', { q: response.choices[0].message.content });
+                if(gifResponse.data && gifResponse.data.length > 0){
+                    const gifUrl = gifResponse.data[0].images.original.url;
+                    console.log(`Generating text response`)
+                    return { text: response.choices[0].message.content, gifUrl: gifUrl};
+                }else{
+                    console.log(`Generating text response`)
+                    return { text: response.choices[0].message.content, gifUrl: null};
+                }*/
+    
+
+/*bot.on('photo', async (ctx) => {
+    try{
+        /*const fileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
+
+        //downloading the image using telegram bot api
+        const file = await ctx.telegram.getFile(fileId);
+        const fileLink = `https://api.telegram.org/file/bot${process.env.TOKEN}/${file.file_path}`;
+
+        const variation = await createImageVariation(fileLink);
+        ctx.reply(`Image variations generated successfully!`);
+        
+       /* ctx.session.editingRequirement = {
+            fileId: fileId,
+            filePath: filePath
+        };
+        ctx.session.userChoice = 'variation';
+        await ctx.reply(`Please provide your image editing requirement`);
+        */
+       /*const photoUrl = await ctx.telegram.getFileLink(ctx.message.photo[0].file_id);
+       const imageStream = fs.createReadStream(photoUrl);
+       const imageVariation = await createImageVariation(imageStream);
+       imageVariation.forEach(img => {
+            ctx.replyWithPhoto({source: img});
+       });
+        const photoInfo = ctx.message.photo[0];
+        const file = await ctx.telegram.getFile(photoInfo.file_id);
+        const fileStream = fs.createWriteStream(`./images/${file.file_id}.jpg`);
+        await ctx.telegram.downloadFile(file.file_path, fileStream);
+
+        const imageStream = fs.createReadStream(`./images/${file.file_id}.jpg`);
+        const imageVariation = await createImageVariation(imageStream);
+        for(const img of imageVariation){
+            await ctx.replyWithPhoto({source:img});
+        }
+    } catch(err){
+        console.log(`Error processing image: ${err}`);
+        await ctx.reply(`Sorry, there was an error in processing your image.`);
+    }
+});*/
+
+
+/*bot.on("message", async (ctx) => {
+    const chatId = ctx.chat.id;
+    const userMessage = ctx.message.text;
+    const user = ctx.chat.first_name;
+    console.log(`Received message from chat ID ${chatId} by ${user}: ${userMessage}`);
+    try{
+        if(userMessage.includes('image')){
+            const imageResponse = await generateImageResponse(userMessage);
+        
+            if (imageResponse.data && imageResponse.data.length > 0) {
+                const imageUrl = imageResponse.data[0].url;
+                //console.log(`Generate image URL: ${imageUrl}`);
+                await ctx.replyWithPhoto({ url: imageUrl });
+            } else {
+                //console.log(`No image URL found in the response: ${ imageResponse}`);
+                await ctx.reply('Sorry, unable to generate an image at the moment.');
+            }
+        }else{
+            const textresponse = await generateTextResponse(userMessage);
+            //console.log(`Generate text response: ${textresponse.choices[0].message.content}`);
+            await ctx.reply(textresponse.choices[0].message.content);
+        }
+    }catch(err){
+        console.log(`Error in generating response ${err}`);
+        await ctx.reply('Sorry, there was an error in processing your request');
+    }
+    
+});
+
+async function generateTextResponse(userMessage){
+    const response = await openai.chat.completions.create({
+        messages: [
+            {role: "system", content: "You are a helpful assistant"},
+            {role: "user", content: userMessage},
+            {role:"assistant", content:"Assistant's message"}
+        ],
+        model: "gpt-3.5-turbo",
+        temperature: 0.7,
+        max_tokens: 1024,
+    })
+    return response;
+}
+
+async function generateImageResponse(userMessage){
+    const response = await openai.images.generate({
+        model: "dall-e-2",
+        prompt: userMessage,
+        size: "1024x1024",
+        quality: "standard",
+        n: 1,
+    });
+    return response;
+}*/
+
+
+/*bot.on("message", async (ctx) => {
+    const chatId = ctx.chat.id;
+    const userMessage = ctx.message.text;
+    console.log(chatId, userMessage);
+    try {
+        const response = await openai.chat.completions.create({
+            messages: [
+                {role: "system", content: "You are a helpful assistant"},
+                {role: "user", content: userMessage},
+                {role:"assistant", content:"Assistant's message"}
+            ],
+            model: "gpt-3.5-turbo",
+            temperature: 0.7,
+            max_tokens: 1024, 
+        });
+        //console.log(response.choices[0].message.content);
+        ctx.reply(response.choices[0].message.content);
+    } catch(error){
+        console.log(`Error generating completion ${error}`);
+        ctx.reply('Sorry, there was an error in processing your request.');
+    }
+    
+});
+
+bot.on("message", async (ctx) => {
+    const chatId = ctx.chat.id;
+    const userMessage = ctx.message.text;
+    console.log(chatId, userMessage);
+    try {
+        const imageResponse = await generateImageResponse(userMessage);
+        
+        if (imageResponse.data && imageResponse.data.length > 0) {
+            const imageUrl = imageResponse.data[0].url;
+            // Reply to the user with the generated image
+            await ctx.replyWithPhoto({ url: imageUrl });
+        } else {
+            console.error('No image URL found in the response:', imageResponse);
+            await ctx.reply('Sorry, unable to generate an image at the moment.');
+        }
+    } catch(error){
+        console.log(`Error generating completion ${error}`);
+        ctx.reply('Sorry, there was an error in processing your request.');
+    }
+    
+});
+
+async function generateImageResponse(userMessage){
+    const response = await openai.images.generate({
+        model: "dall-e-2",
+        prompt: userMessage,
+        size: "1024x1024",
+        quality: "standard",
+        n: 1,
+    });
+    return response;
+}
+*/
+/*
+bot.command('ask', (ctx) => {
+
+    const question = 'Hey are u a developer?';
+
+    ctx.reply(question, {
+        reply_markup: {
+            inline_keyboard: [
+                [{text: "Yes", callback_data: "yes"}, {text: "No", callback_data: "no"}]
+            ]
+        }
+    });
+});
+
+bot.action('yes', (ctx) => {
+    console.log(`User chooses yes`);
+    ctx.answerCbQuery('You choose yes!');
+});
+
+bot.action('no', (ctx) => {
+    console.log(`User chooses no`);
+    ctx.answerCbQuery('oops you choose no');
+});
+
+bot.on("message", (ctx) => {
+    const chatId = ctx.chat.id;
+    const firstName = ctx.chat.first_name;
+    const lastName = ctx.chat.last_name;
+    const user = ctx.chat.username;
+    console.log(user);
+    console.log(`The name of this user is ${firstName} ${lastName}`);
+    console.log(chatId);
+    ctx.sendMessage("Hey there");
+});*/
+
+/*async function createImageVariation(imageStream){
+    try{
+
+        const response = await openai.images.createVariation({
+            image: imageStream,
+            n: 2,
+            size: "1024x1024"
+        });
+        return response.data.variations.map(variation => variation.url);
+    } catch(err) {
+       console.log(`Error in editing image: ${err}`);
+       throw err;
+    }
+    
+}*/
