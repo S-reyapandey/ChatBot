@@ -4,7 +4,7 @@ const {TOKEN, OPENAI_API_KEY} = process.env;
 const {OpenAI, Image} = require('openai');
 const fs = require('fs');
 const {v4: uuidV4 } = require('uuid');
-let factGenerator = require('./factGenerator');
+//let factGenerator = require('./factGenerator');
 
 const openai = new OpenAI(OPENAI_API_KEY);
 const bot = new Telegraf(TOKEN);
